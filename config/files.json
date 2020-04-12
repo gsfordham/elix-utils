@@ -1,10 +1,10 @@
 {
 	"mobo" : {
 		"dir" : "/sys/devices/virtual/dmi/id/",
-		"board_name" : "board_name",
-		"board_vendor" : "board_vendor",
-		"board_version" : "product_version",
-		"board_model" : "product_name",
+		"hw_name" : "board_name",
+		"hw_vendor" : "board_vendor",
+		"hw_version" : "product_version",
+		"hw_model" : "product_name",
 		
 		"sku" : "product_sku",
 		"serial" : "board_serial",

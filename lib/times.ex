@@ -1,4 +1,23 @@
 defmodule ElixUtils.Times do
+	# DateTime of the system (LOCAL)
+	# Date
+	def date do
+		{{y, m, d}, _} = :calendar.local_time()
+		"#{
+			String.pad_leading(to_string(y), 4, "0")}-#{
+			String.pad_leading(to_string(m), 2, "0")}-#{
+			String.pad_leading(to_string(d), 2, "0")}"
+	end
+	
+	# Time
+	def time do
+		{_, {h, m, s}} = :calendar.local_time()
+		"#{
+			String.pad_leading(to_string(h), 2, "0")}:#{
+			String.pad_leading(to_string(m), 2, "0")}:#{
+			String.pad_leading(to_string(s), 2, "0")}"
+	end
+	
 	# System uptime
 	def uptime(file) do
 		case File.read(file) do
