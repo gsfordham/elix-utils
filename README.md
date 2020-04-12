@@ -10,7 +10,7 @@ Elixir library to extract system information on GNU+Linux systems -- basically, 
 \* I will not even begin to try to make this work on Windows, though. God speed and good luck, if _you_ wanna have a whack at it! 👍
 
 # TODO
-~~1) System clock and date (soon)~~ *DONE*
+1) ~~System clock and date (soon)~~ *DONE*
 1) Motherboard information (soon) *Partly done*
 1) CPU information (soon)
 1) System/OS information (soon)
@@ -18,7 +18,7 @@ Elixir library to extract system information on GNU+Linux systems -- basically, 
 1) Memory information (later)
 1) GPU information** (more towards the end)
 1) Disk information (more towards the end)
-_1) Remove redundant code, refactor, optimize (as I go, always)_
+1) _Remove redundant code, refactor, optimize (as I go, always)_
 
 **definitely AMD, but since I don't use Nvidia or Intel, I will not likely do it for those systems -- however, feel free to do so, yourself
 
