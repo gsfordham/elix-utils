@@ -1,0 +1,31 @@
+{
+	"mobo" : {
+		"dir" : "/sys/devices/virtual/dmi/id/",
+		"board_name" : "board_name",
+		"board_vendor" : "board_vendor",
+		"board_version" : "product_version",
+		"board_model" : "product_name",
+		
+		"sku" : "product_sku",
+		"serial" : "board_serial",
+		
+		"bios_vendor" : "bios_vendor",
+		"bios_version" : "bios_version",
+		"bios_date" : "bios_date"
+	},
+	
+	"cpu" : {
+		"dir" : "/proc/",
+		"data" : "cpuinfo"
+	},
+	
+	"memory" : {
+		"dir" : "/proc/",
+		"data" : "meminfo"
+	},
+	
+	"uptime" : {
+		"dir" : "/proc/",
+		"data" : "uptime"
+	}
+}

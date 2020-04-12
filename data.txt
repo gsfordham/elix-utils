@@ -1,0 +1,6 @@
+Motherboard: /sys/devices/virtual/dmi/id/
+CPU: /proc/cpuinfo
+RAM: /proc/meminfo
+Inputs: /proc/bus/input/
+Disks: /proc/diskstats
+Uptime: /proc/uptime
