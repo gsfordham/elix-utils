@@ -3,10 +3,11 @@
 # DESCRIPTION
 Elixir library to extract system information on GNU+Linux systems -- basically, gonna try to make a version of ``psutil`` for Elixir ⚗🐧
 
-🚩_I will not likely make this available on Windows, Mac, or *BSD, but you can feel free to port it and make any necessary changes for your system, if you need it*_
+🚩 _I will not likely make this available on Windows, Mac, or \*BSD, but you can feel free to port it and make any necessary changes for your system, if you need it\*_
 
-*I do not foresee *BSD being a difficult port. Possibly not even Mac. Probably only minor changes, since both are also Unix/Unix-like.
-*I will not even begin to try to make this work on Windows, though. God speed and good luck, if _you_ wanna have a whack at it! 👍
+\* I do not foresee \*BSD being a difficult port. Possibly not even Mac. Probably only minor changes, since both are also Unix/Unix-like.
+
+\* I will not even begin to try to make this work on Windows, though. God speed and good luck, if _you_ wanna have a whack at it! 👍
 
 # TODO
 1) System clock and date (soon)
