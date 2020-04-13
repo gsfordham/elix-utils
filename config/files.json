@@ -6,7 +6,6 @@
 		"hw_version" : "product_version",
 		"hw_model" : "product_name",
 		
-		"sku" : "product_sku",
 		"serial" : "board_serial",
 		
 		"bios_vendor" : "bios_vendor",
