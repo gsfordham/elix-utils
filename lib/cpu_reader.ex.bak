@@ -1,0 +1,77 @@
+defmodule ElixUtils.CPU do
+	# Generate an initial core object to use for indices
+	def init_core(files) do
+		ElixUtils.CPU.Core.init(hd read(files))
+	end
+	
+	def read(files) do
+		path = "#{files["cpu"]["dir"]}#{files["cpu"]["data"]}"
+		#IO.puts(path)
+		case File.read(path) do
+			{:ok, x} -> split_cores(x)
+			_ -> "CANNOT ACCESS CPU FILE"
+		end
+	end
+	
+	# Return the CPU info
+	def processor(core_fmt, files) do
+		cores = Enum.map(read(files), fn (fmt, x) ->
+				ElixUtils.CPU.Core.new(fmt, x)
+			end)
+			
+		model_core = hd cores
+		
+		%{
+			socket: "THIS CPU'S SOCKET",
+			name: "CPU MODEL NAME",
+			vendor: "CPU VENDOR",
+			avg_speed: "AVERAGE CPU SPEED",
+			tot_cache: "TOTAL CACHE SIZE",
+			core_count: "TOTAL CORE COUNT",
+			thread_count: "TOTAL NUMBER OF THREADS"
+		}
+	end
+	
+	def split_cores(data) do
+		records = Enum.reject(
+			Regex.split(~r/\r?\n[\s]*\r?\n/, data), fn x -> 
+					String.trim(x) == ""
+				end)
+		IO.puts("There are #{length(records)} cores/threads")
+		IO.puts("Parts of CPU: #{inspect records}")
+		records
+	end
+end
+
+defmodule ElixUtils.CPU.Core do
+	# Struct that is used to generate
+	# core data INDICES
+	#
+	# Comments to the right are the fields
+	# as they should be written on the data 
+	defstruct [
+		socket: 0, # "physical id"
+		core_id: 0, # "processor"
+		vendor: "DEFAULT VENDOR", # "vendor_id"
+		name: "DEFAULT CPU", # "model name"
+		core_cache: 0, # "cache size"
+		core_clock: 0, # "cpu MHz"
+		core_count: 0, # "cpu cores"
+		thread_count: 0 # "siblings"
+	]
+	
+	def init(core) do
+		lines = Regex.split(~r/\r?\n/, core)
+		
+		Enum.map(lines, fn x ->
+				#case x do
+					
+				#end
+			end)
+	end
+	
+	# Generate the data for a core type object
+	def new(fmt, data) do
+		IO.puts("New core...")
+	end
+end
