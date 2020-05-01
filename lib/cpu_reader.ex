@@ -25,9 +25,10 @@ defmodule ElixUtils.CPU do
 					String.trim(x) == ""
 				end)
 		IO.puts("There are #{length(records)} cores/threads")
-		Enum.map(records, fn x -> 
-				IO.puts("Record: #{inspect x}\n\n")
-			end)
+		#Enum.map(records, fn x -> 
+		#		#IO.puts("Record: #{inspect x}\n\n")
+		#		IO.puts("got a record")
+		#	end)
 		#IO.puts("Parts of CPU: #{inspect records}")
 		records
 	end
@@ -39,44 +40,45 @@ defmodule ElixUtils.CPU.Core do
 	#
 	# Comments to the right are the fields
 	# as they should be written on the data 
-	defstruct [
-		#socket: 0, # "physical id"
-		#core_id: 0, # "processor"
-		#vendor: "DEFAULT VENDOR", # "vendor_id"
-		#name: "DEFAULT CPU", # "model name"
-		#core_cache: 0, # "cache size"
-		#core_clock: 0, # "cpu MHz"
-		#core_count: 0, # "cpu cores"
-		#thread_count: 0 # "siblings"
-		
-		socket: "physical id",
-		core_id: "processor",
-		vendor: "vendor_id",
-		name: "model name",
-		core_cache: "cache size",
-		core_clock: "cpu MHz",
-		core_count: "cpu cores",
-		thread_count: "siblings",
-		current_step: "stepping"
-	]
+	
+	# Get the core mapping
+	defp mapping do
+		%{
+			"physical id" => :socket,
+			"processor" => :core_id,
+			"vendor_id" => :vendor,
+			"model name" => :name,
+			"cache size" => :core_cache,
+			"cpu mhz" => :core_clock,
+			"cpu cores" => :core_count,
+			"siblings" => :thread_count,
+			"stepping" => :current_step
+		}
+	end
 	
 	# Initialize the core layout
 	# Takes a single core's data to generate 
 	# core structure formatter
 	def init(data) do
 		lines = Regex.split(~r/\r?\n/, data)
-		#Enum.map(lines, fn line ->
-		#		IO.puts("Line: #{line}")
+		seg_raw = partition(lines, length(lines))
+		#IO.puts("Segments consist of: #{inspect seg_raw}")
+		segments = clean(seg_raw)
+		#Enum.map(segments, fn seg ->
+		#		IO.puts("#{inspect seg}")
 		#	end)
-		#fmt = %Core{}
-		#|> Enum.map()
-		segments = clean(partition(lines, length(lines)))
-		Enum.map(segments, fn seg ->
-				IO.puts("#{inspect seg}")
-			end)
-		cstruct = build_core(%ElixUtils.CPU.Core{}, segments)
+		cstruct = build_core(invert(mapping()), segments)
+		#IO.puts("\n\nInverted mapping is: #{inspect invert(mapping())}\n\n")
 		IO.puts("#{inspect cstruct}")
-		segments
+		cstruct
+	end
+	
+	# Invert the key-value pair for
+	# Object creation
+	defp invert(m) do
+		m
+		|> Enum.map(fn {k, v} -> {v, k} end)
+		|> Map.new()
 	end
 	
 	# Filter only values of actual use
@@ -86,20 +88,8 @@ defmodule ElixUtils.CPU.Core do
 		# to avoid duplication of code
 		Enum.reject(items, fn item ->
 				!Enum.member?(
-						#[
-						#"processor",
-						#"vendor_id",
-						#"model name",
-						#"cpu mhz",
-						#"cache size",
-						#"physical id",
-						#"siblings",
-						#"core id",
-						#"cpu cores",
-						#"stepping"
-						#]
-					Map.values(%ElixUtils.CPU.Core{}),
-					String.downcase(elem(item, 1)))
+					Map.keys(mapping),
+					String.downcase(elem(item, 2)))
 			end)
 	end
 	
@@ -117,20 +107,39 @@ defmodule ElixUtils.CPU.Core do
 	
 	# Divide the line
 	def divide(index, line) do
+		raw_kv = line
+		|> String.split(":")
+		|> Enum.map(&String.trim/1)
+		
+		k = String.downcase(hd raw_kv)
+		v = hd (tl raw_kv)
+
+		map_atom = mapping[k]
+		#IO.puts("The atom to search the map for is: #{map_atom}")
 		[List.to_tuple(
-			Enum.concat([index],
-			Regex.split(~r/\s*:\s*/, String.trim(line), parts: 2))
+			Enum.concat([index], # index
+				[
+					map_atom, # atom to build keyword list with
+					k, # key
+					v # value
+			])
 		)]
 	end
 	
 	# Combine core components into usable struct
 	def build_core(core, parts) do
+		#IO.puts("core parts count: #{length(parts)} ")
+		#IO.puts("Core is a: #{inspect core}")
+		#IO.puts("Current part is: #{inspect (hd parts)}")
 		if length(parts) > 0 do
-			core
+			#IO.puts("Current core part: #{inspect (hd parts)}")
+			#IO.puts("Items to merge are: #{inspect elem((hd parts), 1)}")
+			build_core(%{core | elem((hd parts), 1) => elem((hd parts), 0)}, (tl parts))
+			#IO.puts("#{inspect (hd parts)}")
+			#core
 		else
 			core
 		end
-		nil
 	end
 	
 	# Read a single core from the list
